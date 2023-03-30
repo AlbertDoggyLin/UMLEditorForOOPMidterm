@@ -3,7 +3,6 @@ package app;
 import CanvasObjects.CanvasObject;
 import CanvasObjects.ConnectableCanvasObj;
 import CanvasObjects.ConnectionCanvasObj;
-import CanvasObjects.ConnectionPort;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,6 +18,7 @@ public enum ModeBehavior {
         void canvasDragged(Canvas canvas, MouseEvent me) {
             assert me.getSource() instanceof CanvasObject;
             if(me.getSource()!=canvas){
+                if(me.getSource() instanceof ConnectionCanvasObj)return;
                 CanvasObject draggedObj = ((CanvasObject) me.getSource()).getAncestor();
                 Point relP = AlgorithmLib.getRelativeCoordinate(canvas, (Component) me.getSource());
                 Point evenPoint = new Point(relP.x+me.getX(), relP.y+me.getY());
@@ -47,8 +47,8 @@ public enum ModeBehavior {
             Point relP = AlgorithmLib.getRelativeCoordinate(canvas, (Component) me.getSource());
             pressedPoint = new Point(relP.x+me.getX(), relP.y+me.getY());
             if(me.getSource()!=canvas){
-                if(me.getSource()!=canvas)
-                    canvas.select((CanvasObject) me.getSource());
+                if(me.getSource() instanceof ConnectionCanvasObj)return;
+                canvas.select((CanvasObject) me.getSource());
                 lastLocation = pressedPoint;
                 return;
             }
